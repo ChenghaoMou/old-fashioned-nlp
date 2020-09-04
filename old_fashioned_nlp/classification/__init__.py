@@ -13,7 +13,7 @@ from sklearn.calibration import CalibratedClassifierCV
 
 def make_classifier(**kargs):
     """
-    Make a tfidf classifier.
+    Make a tfidf classifier. Yes, I know tfidf might seem cliché, but the truth is it is often one of the most efficient text representations I have ever seen.
 
     Returns
     -------
@@ -30,8 +30,8 @@ def make_classifier(**kargs):
     ... )
     """
     model = Pipeline([
-        ('tfidf', TfidfVectorizer()),
-        ('svc', CalibratedClassifierCV(LinearSVC()))
+        ('tfidf', TfidfVectorizer(sublinear_tf=True)),
+        ('svc', CalibratedClassifierCV(LinearSVC(), cv=3)),
     ])
     model.set_params(**kargs)
     return model

@@ -219,6 +219,6 @@ class CleanTextTransformer(TransformerMixin):
         return list(map(_transform, X))
     
     def fit_transform(self, X, y=None):
-        self.fit()
+        self.fit(X, y)
         return self.transform(X)
 
