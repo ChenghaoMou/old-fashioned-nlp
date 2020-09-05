@@ -131,3 +131,4 @@ dmypy.json
 .pyre/
 old_fashioned_nlp.egg-info
 catboost_info
+.pre-commit-config.yaml
