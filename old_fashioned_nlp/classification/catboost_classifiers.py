@@ -10,14 +10,14 @@ from sklearn.base import BaseEstimator
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-class TfidfCatBooostClassifier(BaseEstimator):
+class TfidfCatBoostClassifier(BaseEstimator):
     def __init__(self, **kwargs):
         """
         TfidfVectorizer + CatBoost Classifier. See get_params for details.
 
         Examples
         --------
-        >>> model = TfidfCatBooostClassifier(tfidf__sublinear_tf=True, classifier__iterations=100, classifier__verbose=1)
+        >>> model = TfidfCatBoostClassifier(tfidf__sublinear_tf=True, classifier__iterations=100, classifier__verbose=1)
         """
         self.tfidf = TfidfVectorizer(sublinear_tf=True)
         self.model = CatBoostClassifier(verbose=False)

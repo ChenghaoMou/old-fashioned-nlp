@@ -6,10 +6,10 @@
 """Old fashioned text classifiers."""
 
 from old_fashioned_nlp.classification.catboost_classifiers import (
-    TfidfCatBooostClassifier,
+    TfidfCatBoostClassifier,
 )
 from old_fashioned_nlp.classification.sklearn_classifiers import (
     TfidfLinearSVCClassifier,
 )
 
-__all__ = ["TfidfLinearSVCClassifier", "TfidfCatBooostClassifier"]
+__all__ = ["TfidfLinearSVCClassifier", "TfidfCatBoostClassifier"]
