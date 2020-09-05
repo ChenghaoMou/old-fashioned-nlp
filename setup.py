@@ -1,5 +1,6 @@
-import setuptools
 from pathlib import Path
+
+import setuptools
 
 setuptools.setup(
     name="old-fashioned-nlp",
@@ -9,7 +10,7 @@ setuptools.setup(
     description="Sklearn base nlp models",
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
-    py_modules = ['old_fashioned_nlp'],
+    py_modules=["old_fashioned_nlp"],
     url="<https://github.com/authorname/templatepackage>",
     packages=setuptools.find_packages(),
     classifiers=[
@@ -17,5 +18,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
+    install_requires=["scikit-learn", "catboost", "sklearn-crfsuite", "regex",],
 )
