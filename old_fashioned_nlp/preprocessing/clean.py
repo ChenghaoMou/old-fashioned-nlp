@@ -118,107 +118,73 @@ CONTRACTIONS = {
     re.compile(r"\by'?all'?ve\b", re.I | re.U): "you all have",
     re.compile(r"\byou'?d'?ve\b", re.I | re.U): "you would have",
     re.compile(r"\byou'?re\b", re.I | re.U): "you are",
-    re.compile(r"\byou'?ve\b", re.I | re.U): "you have"
+    re.compile(r"\byou'?ve\b", re.I | re.U): "you have",
 }
 
 
 @dataclass
 class CleanTextTransformer(TransformerMixin):
+    """
+    text cleaning transformer.
 
-    replace_punctuations_with: str =None
-    replace_numbers_with: str =None
-    replace_dates_with: str =None
-    replace_times_with: str =None
+    Examples
+    --------
+    >>> transformer = CleanTextTransformer(
+    ... replace_dates_with='DATE',
+    ... replace_times_with='TIME',
+    ... replace_emails_with='EMAIL',
+    ... replace_numbers_with='NUMBER',
+    ... replace_percentages_with='PERCENT',
+    ... replace_money_with='MONEY',
+    ... replace_hashtags_with='HASHTAG',
+    ... replace_handles_with='HANDLE',
+    ... expand_contractions=True)
+    >>> transformer.transform(["#now @me I'll log 80% entries are due by January 4th, 2017 at 8:00pm contact me at chenghao@armorblox.com send me $500.00 now 3,415"])
+    ['HASHTAG HANDLE I will log PERCENT entries are due by DATE at TIME contact me at EMAIL send me MONEY now NUMBER']
+    """
+
+    replace_punctuations_with: str = None
+    replace_numbers_with: str = None
+    replace_dates_with: str = None
+    replace_times_with: str = None
     replace_money_with: str = None
     replace_percentages_with: str = None
     replace_emails_with: str = None
     replace_handles_with: str = None
     replace_urls_with: str = None
     replace_hashtags_with: str = None
-    expand_contractions: bool=False
-    # stemmer: Callable = None
-    # lemmatizer: Callable=None
+    expand_contractions: bool = False
+
+    def __post_init__(self):
+        self.mappings = {
+            "replace_money_with": RULES["MONEY"],
+            "replace_percentages_with": RULES["PERCENT"],
+            "replace_dates_with": RULES["DATE"],
+            "replace_times_with": RULES["TIME"],
+            "replace_urls_with": RULES["URL"],
+            "replace_emails_with": RULES["EMAIL"],
+            "replace_handles_with": RULES["USER"],
+            "replace_hashtags_with": RULES["HASHTAG"],
+            "replace_numbers_with": RULES["NUMBER"],
+        }
 
     def fit(self, X, y=None):
         return
-    
+
     def transform(self, X, y=None):
-        """
-        Clean the corpus.
+        return list(map(self._transform, X))
 
-        Parameters
-        ----------
-        X : List of strings
-            Input corpus
-        y : [type], optional
-            [description], by default None
-        
-        Examples
-        --------
-        >>> transformer = CleanTextTransformer(
-        ... replace_dates_with='DATE',
-        ... replace_times_with='TIME',
-        ... replace_emails_with='EMAIL',
-        ... replace_numbers_with='NUMBER',
-        ... replace_percentages_with='PERCENT',
-        ... replace_money_with='MONEY',
-        ... replace_hashtags_with='HASHTAG',
-        ... replace_handles_with='HANDLE',
-        ... expand_contractions=True)
-        >>> transformer.transform(["#now @me I'll log 80% entries are due by January 4th, 2017 at 8:00pm contact me at chenghao@armorblox.com send me $500.00 now 3,415"])
-        ['HASHTAG HANDLE I will log PERCENT entries are due by DATE at TIME contact me at EMAIL send me MONEY now NUMBER']
-        """
-
-        def _transform(x):
-
-            if self.expand_contractions:
-                for key in CONTRACTIONS:
-                    for m in key.findall(x):
-                        x = x.replace(m, CONTRACTIONS[key])
-
-            if self.replace_money_with is not None:
-                for money in re.findall(RULES["MONEY"], x):
-                    x = x.replace(money, self.replace_money_with)       
-            
-            if self.replace_percentages_with is not None:
-                for percentage in re.findall(RULES["PERCENT"], x):
-                    x = x.replace(percentage, self.replace_percentages_with)
-
-            if self.replace_dates_with is not None:
-
-                for date in re.findall(RULES["DATE"], x):
-                    x = x.replace(date, self.replace_dates_with)
-            
-            if self.replace_times_with is not None:
-                for time in re.findall(RULES["TIME"], x):
-                    x = x.replace(time, self.replace_times_with)
-
-            if self.replace_urls_with is not None:
-                for link in re.findall(RULES["URL"], x):
-                    x = x.replace(link, self.replace_urls_with)
-            
-            if self.replace_emails_with is not None:
-                for email in re.findall(RULES["EMAIL"], x):
-                    x = x.replace(email, self.replace_emails_with)
-            
-            if self.replace_handles_with is not None:
-                for handle in re.findall(RULES["USER"], x):
-                    x = x.replace(handle, self.replace_handles_with)
-            
-            if self.replace_hashtags_with is not None:
-                for handle in re.findall(RULES["HASHTAG"], x):
-                    x = x.replace(handle, self.replace_hashtags_with)
-
-            if self.replace_numbers_with is not None:
-                for number in re.findall(RULES["NUMBER"], x):
-                    x = x.replace(number, self.replace_numbers_with)
-
-            
-            return x
-
-        return list(map(_transform, X))
-    
     def fit_transform(self, X, y=None):
         self.fit(X, y)
         return self.transform(X)
 
+    def _transform(self, x):
+        if self.expand_contractions:
+            for key in CONTRACTIONS:
+                for m in key.findall(x):
+                    x = x.replace(m, CONTRACTIONS[key])
+        for key, rules in self.mappings.items():
+            if getattr(self, key, None) is not None:
+                for element in re.findall(rules, x):
+                    x = x.replace(element, getattr(self, key, None))
+        return x
