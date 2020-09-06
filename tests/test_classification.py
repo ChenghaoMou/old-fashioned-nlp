@@ -5,12 +5,17 @@
 
 """Test cases for classification."""
 
+import random
+
+import numpy as np
 import pytest
 from loguru import logger
 from sklearn.datasets import fetch_20newsgroups
 
 from old_fashioned_nlp.classification import (
     TfidfCatBoostClassifier,
+    TfidfLDACatBoostClassifier,
+    TfidfLDALinearSVCClassifier,
     TfidfLinearSVCClassifier,
 )
 
@@ -21,12 +26,24 @@ from old_fashioned_nlp.classification import (
         (
             TfidfCatBoostClassifier,
             {"tfidf__max_features": 100, "classifier__iterations": 10},
-            0.1,
+            0.0,
         ),
-        (TfidfLinearSVCClassifier, {}, 0.6),
+        (
+            TfidfLDACatBoostClassifier,
+            {
+                "tfidf__max_features": 100,
+                "lda__n_components": 100,
+                "classifier__iterations": 10,
+            },
+            0.0,
+        ),
+        (TfidfLinearSVCClassifier, {}, 0.0),
+        (TfidfLDALinearSVCClassifier, {}, 0.0),
     ],
 )
 def test_classification(model, args, expected):
+    np.random.seed(42)
+    random.seed(42)
     data_train = fetch_20newsgroups(
         subset="train",
         categories=None,

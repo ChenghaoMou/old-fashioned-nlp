@@ -7,9 +7,16 @@
 
 from old_fashioned_nlp.classification.catboost_classifiers import (
     TfidfCatBoostClassifier,
+    TfidfLDACatBoostClassifier,
 )
 from old_fashioned_nlp.classification.sklearn_classifiers import (
+    TfidfLDALinearSVCClassifier,
     TfidfLinearSVCClassifier,
 )
 
-__all__ = ["TfidfLinearSVCClassifier", "TfidfCatBoostClassifier"]
+__all__ = [
+    "TfidfLinearSVCClassifier",
+    "TfidfCatBoostClassifier",
+    "TfidfLDACatBoostClassifier",
+    "TfidfLDALinearSVCClassifier",
+]

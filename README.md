@@ -12,7 +12,7 @@ This package aims to bring back the old fashioned NLP pipelines into your modeli
 
 ### Classification
 
-Currently, we have `TfidfLinearSVCClassifier` and `TfidfCatBoostClassifier`.
+Currently, we have `TfidfLinearSVCClassifier`, `TfidfCatBoostClassifier`, `TfidfLDALinearSVCClassifier` and `TfidfLDACatBoostClassifier`.
 
 ```python
 from old_fashioned_nlp.classification import TfidfLinearSVCClassifier, TfidfCatBoostClassifier
