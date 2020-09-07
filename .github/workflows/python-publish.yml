@@ -4,7 +4,7 @@
 name: pypi
 
 on:
-  push
+  release
 
 jobs:
   deploy:
@@ -28,4 +28,4 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         python setup.py sdist bdist_wheel
-        twine upload --repository-url https://upload.pypi.org/legacy/ dist/* 
+        twine upload --repository-url https://upload.pypi.org/legacy/ dist/*

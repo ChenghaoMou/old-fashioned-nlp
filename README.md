@@ -1,6 +1,10 @@
 # Old Fashioned NLP
 
-<img src="https://raw.githubusercontent.com/ChenghaoMou/old-fashioned-nlp/master/coverage.svg"/> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<img src="https://raw.githubusercontent.com/ChenghaoMou/old-fashioned-nlp/master/coverage.svg"/> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PyPI version](https://badge.fury.io/py/old-fashioned-nlp.svg)](https://badge.fury.io/py/old-fashioned-nlp)
+
+Builds
+![pypi](https://github.com/ChenghaoMou/old-fashioned-nlp/workflows/pypi/badge.svg)
+
 
 This package aims to bring back the old fashioned NLP pipelines into your modeling workflow, providing a baseline reference before you move onto a transformer model.
 
