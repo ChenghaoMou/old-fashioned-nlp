@@ -4,7 +4,11 @@
 name: pypi
 
 on:
-  release
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
 
 jobs:
   deploy:
