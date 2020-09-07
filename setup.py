@@ -11,7 +11,7 @@ setuptools.setup(
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
     py_modules=["old_fashioned_nlp"],
-    url="<https://github.com/authorname/templatepackage>",
+    url="https://github.com/ChenghaoMou/old-fashioned-nlp",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
