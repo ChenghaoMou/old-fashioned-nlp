@@ -16,6 +16,23 @@ def benchmark_classification():
 
     model = TfidfLinearSVCClassifier()
 
+    sogou = load_dataset("sogou_news")
+    model.fit(
+        list(map(" ".join, zip(sogou["train"]["title"], sogou["train"]["content"]))),
+        sogou["train"]["label"],
+    )
+    logger.info(
+        "SOGOU\n"
+        + classification_report(
+            sogou["test"]["label"],
+            model.predict(
+                list(
+                    map(" ".join, zip(sogou["test"]["title"], sogou["test"]["content"]))
+                )
+            ),
+        )
+    )
+
     glue_cola = load_dataset("glue", "cola")
     model.fit(glue_cola["train"]["sentence"], glue_cola["train"]["label"])
     logger.info(
@@ -29,19 +46,10 @@ def benchmark_classification():
     glue_sst = load_dataset("glue", "sst2")
     model.fit(glue_sst["train"]["sentence"], glue_sst["train"]["label"])
     logger.info(
-        "GLUE/COLA\n"
+        "GLUE/SST2\n"
         + classification_report(
             glue_sst["validation"]["label"],
             model.predict(glue_sst["validation"]["sentence"]),
-        )
-    )
-
-    yelp = load_dataset("yelp_polarity")
-    model.fit(yelp["train"]["text"], yelp["train"]["label"])
-    logger.info(
-        "Yelp\n"
-        + classification_report(
-            yelp["test"]["label"], model.predict(yelp["test"]["text"])
         )
     )
 
@@ -62,10 +70,6 @@ def benchmark_classification():
             allocine["test"]["label"], model.predict(allocine["test"]["review"])
         )
     )
-
-    # anli = load_dataset('anli')
-    # model.fit(anli["train"]["premise"] + " " + anli["train"]["hypothesis"], anli["train"]["label"])
-    # logger.info('allocine\n' + classification_report(anli["test"]["label"], model.predict(anli["test"]["premise"] + " " + anli["test"]["hypothesis"])))
 
     yelp = load_dataset("yelp_polarity")
     model.fit(yelp["train"]["text"], yelp["train"]["label"])

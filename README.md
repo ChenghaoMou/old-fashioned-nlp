@@ -67,3 +67,92 @@ transformer = CleanTextTransformer(
 )
 transformer.transform(["#now @me I'll log 80% entries are due by January 4th, 2017at 8:00pm contact me at chenghao@armorblox.com send me $500.00 now 3,415"])
 ```
+
+## Benchmarks
+
+### Classification
+All scores are test scores using `nlp` datasets from Huggingface. See benchmarks directory for details.
+
+SOGOU
+```
+              precision    recall  f1-score   support
+
+           0       0.96      0.95      0.95     12000
+           1       0.93      0.95      0.94     12000
+           2       0.95      0.97      0.96     12000
+           3       0.95      0.96      0.96     12000
+           4       0.96      0.92      0.94     12000
+
+    accuracy                           0.95     60000
+   macro avg       0.95      0.95      0.95     60000
+weighted avg       0.95      0.95      0.95     60000
+```
+
+GLUE/COLA
+```
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00       322
+           1       0.69      1.00      0.82       721
+
+    accuracy                           0.69      1043
+   macro avg       0.35      0.50      0.41      1043
+weighted avg       0.48      0.69      0.57      1043
+```
+
+GLUE/SST2
+```
+              precision    recall  f1-score   support
+
+           0       0.84      0.77      0.80       428
+           1       0.79      0.86      0.82       444
+
+    accuracy                           0.81       872
+   macro avg       0.82      0.81      0.81       872
+weighted avg       0.82      0.81      0.81       872
+```
+
+Yelp
+```
+              precision    recall  f1-score   support
+
+           0       0.94      0.94      0.94     19000
+           1       0.94      0.94      0.94     19000
+
+    accuracy                           0.94     38000
+   macro avg       0.94      0.94      0.94     38000
+weighted avg       0.94      0.94      0.94     38000
+```
+
+AG News
+```
+              precision    recall  f1-score   support
+
+           0       0.94      0.91      0.92      1900
+           1       0.96      0.98      0.97      1900
+           2       0.90      0.89      0.89      1900
+           3       0.89      0.91      0.90      1900
+
+    accuracy                           0.92      7600
+   macro avg       0.92      0.92      0.92      7600
+weighted avg       0.92      0.92      0.92      7600
+```
+
+allocine
+```
+              precision    recall  f1-score   support
+
+           0       0.93      0.93      0.93     10408
+           1       0.92      0.93      0.92      9592
+
+    accuracy                           0.93     20000
+   macro avg       0.93      0.93      0.93     20000
+weighted avg       0.93      0.93      0.93     20000
+```
+
+### Tagging
+
+Default `CharTfidfTagger`
+
+CONLL POS score: 0.5835184323399495
+CONLL NER score: 0.15840812513116917
