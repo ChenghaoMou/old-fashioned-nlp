@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="old-fashioned-nlp",
-    version="0.0.4",
+    version="0.0.5",
     author="Chenghao Mou",
     author_email="mouchenghao@gmail.com",
     description="Sklearn base nlp models",
@@ -19,5 +19,18 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
-    install_requires=["scikit-learn", "catboost", "sklearn-crfsuite", "regex",],
+    install_requires=[
+        "nlp",
+        "pytest",
+        "nltk",
+        "scipy",
+        "numpy",
+        "catboost",
+        "loguru",
+        "sklearn_crfsuite",
+        "pandas",
+        "regex",
+        "rich",
+        "scikit_learn",
+    ],
 )
