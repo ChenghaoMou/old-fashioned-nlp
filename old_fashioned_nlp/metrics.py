@@ -6,13 +6,16 @@
 """Useful metrics with confident intervals."""
 
 import math
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 import numpy as np
+import pandas as pd
+from rich.console import Console
 from scipy.stats import norm
+from sklearn.metrics import classification_report as cr
 
 
-def metric_with_params(
+def ci_with_params(
     metric: Callable,
     truth: List[Any],
     predictions: List[Any],
@@ -63,7 +66,7 @@ def metric_with_params(
     ]
 
 
-def metric_with_bs(
+def ci_with_bs(
     metric: Callable,
     truth: List[Any],
     predictions: List[Any],
@@ -116,3 +119,86 @@ def metric_with_bs(
         max(0.0, np.percentile(scores, lower_p)),
         min(1.0, np.percentile(scores, upper_p)),
     ]
+
+
+def classification_stats(corpus: List[str], labels: List[Union[str, int]]):
+    """
+    Get some stats for classification tasks.
+
+    Parameters
+    ----------
+    corpus : List[str]
+        List of strings
+    labels : List[Union[str, int]]
+        List of labels
+    """
+    console = Console()
+
+    df = pd.DataFrame({"Text": corpus, "Label": labels})
+
+    df["Length"] = df["Text"].map(len)
+    df["LengthBin"] = pd.cut(
+        df["Length"],
+        list(map(math.floor, np.logspace(0, math.log(df["Length"].max(), 2), num=10))),
+        duplicates="drop",
+    )
+    df["TokenLength"] = df["Text"].map(lambda x: len(x.split(" ")))
+    df["TokenLengthBin"] = pd.cut(
+        df["TokenLength"],
+        list(
+            map(
+                math.floor, np.logspace(0, math.log(df["TokenLength"].max(), 2), num=10)
+            )
+        ),
+        duplicates="drop",
+    )
+
+    console.print()
+    console.print(df.groupby("Label").size().to_string())
+
+    console.print("\n[green bold italic]Length statistics[/green bold italic]:")
+    console.print(df["Length"].describe().to_string())
+
+    console.print()
+    console.print(df.groupby("LengthBin").size().to_string())
+
+    console.print("\n[green bold italic]Token Length statistics[/green bold italic]:")
+    console.print(df["TokenLength"].describe().to_string())
+
+    console.print()
+    console.print(df.groupby("TokenLengthBin").size().to_string())
+
+
+def classification_report(
+    corpus: List[str],
+    predictions: List[Union[str, int]],
+    labels: Optional[List[Union[str, int]]] = None,
+):
+    """
+    Classification report with details!
+
+    Parameters
+    ----------
+    corpus : List[str]
+        List of strings
+    predictions : List[Union[str, int]]
+        List of predictions
+    labels : Optional[List[Union[str, int]]], optional
+        List of labels, by default None
+    """
+    console = Console()
+    console.print(
+        "\n[green bold italic]Classification prediction statistics[/green bold italic]"
+    )
+    df = pd.DataFrame({"Text": corpus, "Label": labels, "Prediction": predictions})
+
+    console.print()
+    console.print(df.groupby("Prediction").size().to_string())
+    if labels:
+        console.print()
+        console.print(df.groupby("Label").size().to_string())
+        console.print(cr(df["Label"], df["Prediction"], zero_division=0.0))
+        for example, label, pred in zip(corpus, predictions, labels):
+            if label != pred:
+                console.print(f"[green]{label}[/green] != [red]{pred}[/red]")
+                console.print(f"Example: [yellow italic]{example}[/yellow italic]")
