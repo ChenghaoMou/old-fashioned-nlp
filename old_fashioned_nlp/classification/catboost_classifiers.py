@@ -63,6 +63,11 @@ class TfidfCatBoostClassifier(BaseEstimator):
         vectors.sort_indices()
         return self.model.score(vectors, y)
 
+    def __getattr__(self, name):
+        if name not in self.__dict__:
+            return getattr(self.model, name)
+        return self.__dict__[name]
+
 
 class TfidfLDACatBoostClassifier(BaseEstimator):
     def __init__(self, **kwargs):
@@ -127,3 +132,8 @@ class TfidfLDACatBoostClassifier(BaseEstimator):
         vectors = self.lda.transform(vectors)
         # vectors.sort_indices()
         return self.model.score(vectors, y)
+
+    def __getattr__(self, name):
+        if name not in self.__dict__:
+            return getattr(self.model, name)
+        return self.__dict__[name]

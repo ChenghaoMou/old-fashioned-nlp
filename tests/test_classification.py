@@ -64,6 +64,7 @@ def test_classification(model, args, expected):
     logger.info(
         f"{m.__class__.__name__} score in test set: {m.score(data_test.data, data_test.target):.2f}"
     )
+    m.predict_proba(data_test.data)
     assert (
         m.score(data_test.data, data_test.target) >= expected
     ), "Deteriorated performance"

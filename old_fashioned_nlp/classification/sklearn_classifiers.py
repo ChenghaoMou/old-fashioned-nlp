@@ -45,6 +45,11 @@ class TfidfLinearSVCClassifier(BaseEstimator):
     def score(self, X, y):
         return self.model.score(X, y)
 
+    def __getattr__(self, name):
+        if name not in self.__dict__:
+            return getattr(self.model, name)
+        return self.__dict__[name]
+
 
 class TfidfLDALinearSVCClassifier(BaseEstimator):
     def __init__(self, **kwargs):
@@ -78,3 +83,8 @@ class TfidfLDALinearSVCClassifier(BaseEstimator):
 
     def score(self, X, y):
         return self.model.score(X, y)
+
+    def __getattr__(self, name):
+        if name not in self.__dict__:
+            return getattr(self.model, name)
+        return self.__dict__[name]
