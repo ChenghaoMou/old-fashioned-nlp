@@ -1,6 +1,6 @@
 # Old Fashioned NLP
 
-<img src="https://raw.githubusercontent.com/ChenghaoMou/old-fashioned-nlp/master/coverage.svg"/> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PyPI version](https://badge.fury.io/py/old-fashioned-nlp.svg)](https://badge.fury.io/py/old-fashioned-nlp)
+<img src="https://raw.githubusercontent.com/ChenghaoMou/old-fashioned-nlp/master/coverage.svg"/> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PyPI version](https://badge.fury.io/py/old-fashioned-nlp.svg)](https://badge.fury.io/py/old-fashioned-nlp) [![CodeFactor](https://www.codefactor.io/repository/github/sleeplessindebugging/old-fashioned-nlp/badge/master)](https://www.codefactor.io/repository/github/sleeplessindebugging/old-fashioned-nlp/overview/master)
 
 Builds
 ![pypi](https://github.com/ChenghaoMou/old-fashioned-nlp/workflows/pypi/badge.svg)
