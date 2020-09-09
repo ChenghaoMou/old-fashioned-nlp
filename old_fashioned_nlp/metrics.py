@@ -13,6 +13,7 @@ import pandas as pd
 from rich.console import Console
 from scipy.stats import norm
 from sklearn.metrics import classification_report as cr
+from sklearn.metrics import confusion_matrix as cm
 
 
 def ci_with_params(
@@ -121,7 +122,11 @@ def ci_with_bs(
     ]
 
 
-def classification_stats(corpus: List[str], labels: List[Union[str, int]]):
+def classification_stats(
+    corpus: List[str],
+    labels: List[Union[str, int]],
+    print_function: Callable = Console().print,
+):
     """
     Get some stats for classification tasks.
 
@@ -131,8 +136,10 @@ def classification_stats(corpus: List[str], labels: List[Union[str, int]]):
         List of strings
     labels : List[Union[str, int]]
         List of labels
+    print_function: Callable
+        print function to call, default Console().print
+
     """
-    console = Console()
 
     df = pd.DataFrame({"Text": corpus, "Label": labels})
 
@@ -153,26 +160,27 @@ def classification_stats(corpus: List[str], labels: List[Union[str, int]]):
         duplicates="drop",
     )
 
-    console.print()
-    console.print(df.groupby("Label").size().to_string())
+    print_function()
+    print_function(df.groupby("Label").size().to_string())
 
-    console.print("\n[green bold italic]Length statistics[/green bold italic]:")
-    console.print(df["Length"].describe().to_string())
+    print_function("\n[green bold italic]Length statistics[/green bold italic]:")
+    print_function(df["Length"].describe().to_string())
 
-    console.print()
-    console.print(df.groupby("LengthBin").size().to_string())
+    print_function()
+    print_function(df.groupby("LengthBin").size().to_string())
 
-    console.print("\n[green bold italic]Token Length statistics[/green bold italic]:")
-    console.print(df["TokenLength"].describe().to_string())
+    print_function("\n[green bold italic]Token Length statistics[/green bold italic]:")
+    print_function(df["TokenLength"].describe().to_string())
 
-    console.print()
-    console.print(df.groupby("TokenLengthBin").size().to_string())
+    print_function()
+    print_function(df.groupby("TokenLengthBin").size().to_string())
 
 
 def classification_report(
     corpus: List[str],
     predictions: List[Union[str, int]],
     labels: Optional[List[Union[str, int]]] = None,
+    print_function: Callable = Console().print,
 ):
     """
     Classification report with details!
@@ -185,20 +193,28 @@ def classification_report(
         List of predictions
     labels : Optional[List[Union[str, int]]], optional
         List of labels, by default None
+    print_function: Callable
+        print function to call, default Console().print
     """
-    console = Console()
-    console.print(
+
+    print_function(
         "\n[green bold italic]Classification prediction statistics[/green bold italic]"
     )
     df = pd.DataFrame({"Text": corpus, "Label": labels, "Prediction": predictions})
 
-    console.print()
-    console.print(df.groupby("Prediction").size().to_string())
+    print_function()
+    print_function(df.groupby("Prediction").size().to_string())
     if labels:
-        console.print()
-        console.print(df.groupby("Label").size().to_string())
-        console.print(cr(df["Label"], df["Prediction"], zero_division=0.0))
+        print_function()
+        print_function(df.groupby("Label").size().to_string())
+        print_function(cr(df["Label"], df["Prediction"], zero_division=0.0))
+        print_function()
+        print_function(cm(df["Label"], df["Prediction"], normalize="true"))
+        print_function()
+        print_function(cm(df["Label"], df["Prediction"]))
+
         for example, label, pred in zip(corpus, predictions, labels):
             if label != pred:
-                console.print(f"[green]{label}[/green] != [red]{pred}[/red]")
-                console.print(f"Example: [yellow italic]{example}[/yellow italic]")
+                print_function()
+                print_function(f"[green]{label}[/green] != [red]{pred}[/red]")
+                print_function(f"Example: [yellow italic]{example}[/yellow italic]")
