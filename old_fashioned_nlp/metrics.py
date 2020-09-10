@@ -49,7 +49,7 @@ def ci_with_params(
     Examples
     --------
     >>> from sklearn.metrics import accuracy_score
-    >>> metric_with_params(accuracy_score, [1, 2, 1, 1, 1, 1, 3], [1, 2, 1, 1, 1, 1, 1], confidence=.8)
+    >>> ci_with_params(accuracy_score, [1, 2, 1, 1, 1, 1, 3], [1, 2, 1, 1, 1, 1, 1], confidence=.8)
     [0.6876448288176897, 1.0]
     """
     cv = norm.ppf((1 + confidence) / 2.0) if two_sided else norm.ppf(confidence)
@@ -103,7 +103,7 @@ def ci_with_bs(
     Examples
     --------
     >>> from sklearn.metrics import accuracy_score
-    >>> metric_with_bs(accuracy_score, [1, 2, 1, 1, 1, 1, 3], [1, 2, 1, 1, 1, 1, 1], confidence=.8)
+    >>> ci_with_bs(accuracy_score, [1, 2, 1, 1, 1, 1, 3], [1, 2, 1, 1, 1, 1, 1], confidence=.8)
     [0.7142857142857143, 1.0]
     """
     truth = np.asarray(truth)
@@ -190,7 +190,7 @@ def classification_report(
 
     Examples
     --------
-    >>> classification_report(["a", "b"], ["1", "2"], ["1", "1"])
+    >>> _ = classification_report(["a", "b"], ["1", "2"], ["1", "1"]) # doctest: +SKIP
     """
 
     results = []

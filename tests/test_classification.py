@@ -15,8 +15,8 @@ from sklearn.datasets import fetch_20newsgroups
 from old_fashioned_nlp.classification import (
     TfidfCatBoostClassifier,
     TfidfLDACatBoostClassifier,
-    TfidfLDALinearSVCClassifier,
-    TfidfLinearSVCClassifier,
+    TfidfLDALinearSVC,
+    TfidfLinearSVC,
 )
 
 
@@ -37,8 +37,8 @@ from old_fashioned_nlp.classification import (
             },
             0.0,
         ),
-        (TfidfLinearSVCClassifier, {}, 0.0),
-        (TfidfLDALinearSVCClassifier, {}, 0.0),
+        (TfidfLinearSVC, {}, 0.0),
+        (TfidfLDALinearSVC, {}, 0.0),
     ],
 )
 def test_classification(model, args, expected):

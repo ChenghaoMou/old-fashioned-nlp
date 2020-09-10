@@ -9,12 +9,12 @@ from loguru import logger
 from nlp import load_dataset
 from sklearn.metrics import classification_report
 
-from old_fashioned_nlp.classification import TfidfLinearSVCClassifier
+from old_fashioned_nlp.classification import TfidfLinearSVC
 
 
 def benchmark_classification():
 
-    model = TfidfLinearSVCClassifier()
+    model = TfidfLinearSVC()
 
     sogou = load_dataset("sogou_news")
     model.fit(

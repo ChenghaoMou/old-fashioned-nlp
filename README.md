@@ -16,10 +16,10 @@ This package aims to bring back the old fashioned NLP pipelines into your modeli
 
 ### Classification
 
-Currently, we have `TfidfLinearSVCClassifier`, `TfidfCatBoostClassifier`, `TfidfLDALinearSVCClassifier` and `TfidfLDACatBoostClassifier`.
+Currently, we have `TfidfLinearSVC`, `TfidfCatBoostClassifier`, `TfidfLDALinearSVC` and `TfidfLDACatBoostClassifier`.
 
 ```python
-from old_fashioned_nlp.classification import TfidfLinearSVCClassifier, TfidfCatBoostClassifier
+from old_fashioned_nlp.classification import TfidfLinearSVC, TfidfCatBoostClassifier
 from sklearn.datasets import fetch_20newsgroups
 
 data_train = fetch_20newsgroups(subset='train', categories=None,
@@ -30,7 +30,7 @@ data_test = fetch_20newsgroups(subset='test', categories=None,
                             shuffle=True, random_state=42,
                             remove=('headers', 'footers', 'quotes'))
 
-m = TfidfLinearSVCClassifier()
+m = TfidfLinearSVC()
 m.fit(data_train.data, data_train.target)
 m.score(data_test.data, data_test.target)
 ```
@@ -52,6 +52,9 @@ model = CharTfidfTagger()
 model.fit(train_tokens, train_pos)
 model.score(test_tokens, test_pos)
 ```
+
+### Regression
+Similar to classification, we have `TfidfLinearSVR` and `TfidfLDALinearSVR`.
 
 ### Text Cleaning
 

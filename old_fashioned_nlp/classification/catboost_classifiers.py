@@ -59,6 +59,11 @@ class TfidfCatBoostClassifier(BaseEstimator):
         vectors.sort_indices()
         return self.model.predict(vectors)
 
+    def predict_proba(self, X):
+        vectors = self.tfidf.transform(X)
+        vectors.sort_indices()
+        return self.model.predict_proba(vectors)
+
     def score(self, X, y):
         vectors = self.tfidf.transform(X)
         vectors.sort_indices()
@@ -128,6 +133,12 @@ class TfidfLDACatBoostClassifier(BaseEstimator):
         vectors = self.lda.transform(vectors)
         # vectors.sort_indices()
         return self.model.predict(vectors)
+
+    def predict_proba(self, X):
+        vectors = self.tfidf.transform(X)
+        vectors = self.lda.transform(vectors)
+        # vectors.sort_indices()
+        return self.model.predict_proba(vectors)
 
     def score(self, X, y):
         vectors = self.tfidf.transform(X)
