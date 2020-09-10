@@ -52,6 +52,7 @@ class TfidfCatBoostClassifier(BaseEstimator):
         vectors = self.tfidf.fit_transform(X)
         vectors.sort_indices()
         self.model.fit(vectors, y, **kwargs)
+        return self
 
     def predict(self, X):
         vectors = self.tfidf.transform(X)
@@ -120,6 +121,7 @@ class TfidfLDACatBoostClassifier(BaseEstimator):
         vectors = self.lda.fit_transform(vectors)
         # vectors.sort_indices()
         self.model.fit(vectors, y, **kwargs)
+        return self
 
     def predict(self, X):
         vectors = self.tfidf.transform(X)

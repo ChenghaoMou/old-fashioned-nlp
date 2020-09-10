@@ -11,6 +11,8 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 from scipy.stats import norm
 from sklearn.metrics import classification_report as cr
 from sklearn.metrics import confusion_matrix as cm
@@ -123,10 +125,8 @@ def ci_with_bs(
 
 
 def classification_stats(
-    corpus: List[str],
-    labels: List[Union[str, int]],
-    print_function: Callable = Console().print,
-):
+    corpus: List[str], labels: List[Union[str, int]],
+) -> pd.DataFrame:
     """
     Get some stats for classification tasks.
 
@@ -136,8 +136,11 @@ def classification_stats(
         List of strings
     labels : List[Union[str, int]]
         List of labels
-    print_function: Callable
-        print function to call, default Console().print
+
+    Returns
+    -------
+    pd.DataFrame
+        stats for the dataframe
 
     """
 
@@ -160,28 +163,14 @@ def classification_stats(
         duplicates="drop",
     )
 
-    print_function()
-    print_function(df.groupby("Label").size().to_string())
-
-    print_function("\n[green bold italic]Length statistics[/green bold italic]:")
-    print_function(df["Length"].describe().to_string())
-
-    print_function()
-    print_function(df.groupby("LengthBin").size().to_string())
-
-    print_function("\n[green bold italic]Token Length statistics[/green bold italic]:")
-    print_function(df["TokenLength"].describe().to_string())
-
-    print_function()
-    print_function(df.groupby("TokenLengthBin").size().to_string())
+    return df[["Length", "LengthBin", "TokenLength", "TokenLengthBin"]]
 
 
 def classification_report(
     corpus: List[str],
+    labels: Optional[List[Union[str, int]]],
     predictions: List[Union[str, int]],
-    labels: Optional[List[Union[str, int]]] = None,
-    print_function: Callable = Console().print,
-):
+) -> List[Tuple[Any, Any, str]]:
     """
     Classification report with details!
 
@@ -189,32 +178,65 @@ def classification_report(
     ----------
     corpus : List[str]
         List of strings
+    labels : Optional[List[Union[str, int]]], optional
+        List of labels
     predictions : List[Union[str, int]]
         List of predictions
-    labels : Optional[List[Union[str, int]]], optional
-        List of labels, by default None
-    print_function: Callable
-        print function to call, default Console().print
+
+    Returns
+    -------
+    List[Tuple[Any, Any, str]]:
+        List of label, prediction, text triplets
+
+    Examples
+    --------
+    >>> classification_report(["a", "b"], ["1", "2"], ["1", "1"])
     """
 
-    print_function(
-        "\n[green bold italic]Classification prediction statistics[/green bold italic]"
-    )
-    df = pd.DataFrame({"Text": corpus, "Label": labels, "Prediction": predictions})
+    results = []
+    console = Console()
 
-    print_function()
-    print_function(df.groupby("Prediction").size().to_string())
     if labels:
-        print_function()
-        print_function(df.groupby("Label").size().to_string())
-        print_function(cr(df["Label"], df["Prediction"], zero_division=0.0))
-        print_function()
-        print_function(cm(df["Label"], df["Prediction"], normalize="true"))
-        print_function()
-        print_function(cm(df["Label"], df["Prediction"]))
+        table = Table(show_header=True)
+        for col in ["category", "precision", "recall", "f1-score", "support"]:
+            table.add_column(col)
+        for row, columns in cr(
+            labels, predictions, output_dict=True, zero_division=0
+        ).items():
+            if isinstance(columns, float):
+                continue
+            table.add_row(
+                *list(
+                    map(
+                        lambda x: x if isinstance(x, str) else f"{x:.2f}",
+                        [
+                            row,
+                            columns["precision"],
+                            columns["recall"],
+                            columns["f1-score"],
+                            columns["support"],
+                        ],
+                    )
+                )
+            )
+        console.print(table)
+
+        table = Table(show_header=True)
+        classes = list(set(labels))
+        for c in ["truth\\pred"] + classes:
+            table.add_column(c)
+
+        for c, row in zip(classes, cm(labels, predictions, labels=classes)):
+            table.add_row(c, *list(map(str, row)))
+        console.print(table)
 
         for example, label, pred in zip(corpus, predictions, labels):
             if label != pred:
-                print_function()
-                print_function(f"[green]{label}[/green] != [red]{pred}[/red]")
-                print_function(f"Example: [yellow italic]{example}[/yellow italic]")
+                results.append((label, pred, example))
+                console.print(
+                    Panel(
+                        f"""[green]{label}[/green]!=[red]pred[/red]\n[i]example[/i]"""
+                    )
+                )
+
+    return results

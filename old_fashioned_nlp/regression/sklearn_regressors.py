@@ -3,30 +3,26 @@
 # @Update       : 2020-09-05 08:19:53
 # @Author       : Chenghao Mou (mouchenghao@gmail.com)
 
-"""Sklearn-based text classifiers."""
+"""Sklearn-based text regressors."""
 
 from sklearn.base import BaseEstimator
-from sklearn.calibration import CalibratedClassifierCV
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
-from sklearn.svm import LinearSVC
+from sklearn.svm import LinearSVR
 
 
-class TfidfLinearSVC(BaseEstimator):
+class TfidfLinearSVR(BaseEstimator):
     def __init__(self, **kwargs):
         """
-        TfidfVectorizer + Calibrated Linear SVC. See get_params for details.
+        TfidfVectorizer + Linear SVM Regressor. See get_params for details.
 
         Examples
         --------
-        >>> model = TfidfLinearSVC(tfidf__sublinear_tf=True, classifier__cv=3)
+        >>> model = TfidfLinearSVR(tfidf__sublinear_tf=True)
         """
         self.model = Pipeline(
-            [
-                ("tfidf", TfidfVectorizer(sublinear_tf=True)),
-                ("classifier", CalibratedClassifierCV(LinearSVC(), cv=3)),
-            ]
+            [("tfidf", TfidfVectorizer(sublinear_tf=True)), ("regressor", LinearSVR()),]
         )
         self.set_params(**kwargs)
 
@@ -52,20 +48,20 @@ class TfidfLinearSVC(BaseEstimator):
         return self.__dict__[name]
 
 
-class TfidfLDALinearSVC(BaseEstimator):
+class TfidfLDALinearSVR(BaseEstimator):
     def __init__(self, **kwargs):
         """
-        TfidfVectorizer + LDA + Calibrated Linear SVC. See get_params for details.
+        TfidfVectorizer + LDA + Linear SVM Regressor. See get_params for details.
 
         Examples
         --------
-        >>> model = TfidfLDALinearSVC(tfidf__sublinear_tf=True, lda__n_components=100, classifier__cv=3)
+        >>> model = TfidfLDALinearSVR(tfidf__sublinear_tf=True, lda__n_components=100)
         """
         self.model = Pipeline(
             [
                 ("tfidf", TfidfVectorizer(sublinear_tf=True)),
                 ("lda", LatentDirichletAllocation(n_components=100)),
-                ("classifier", CalibratedClassifierCV(LinearSVC(), cv=3)),
+                ("regressor", LinearSVR()),
             ]
         )
         self.set_params(**kwargs)
