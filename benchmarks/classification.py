@@ -7,6 +7,7 @@
 
 from loguru import logger
 from nlp import load_dataset
+from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics import classification_report
 
 from old_fashioned_nlp.classification import TfidfLinearSVC
@@ -15,6 +16,20 @@ from old_fashioned_nlp.classification import TfidfLinearSVC
 def benchmark_classification():
 
     model = TfidfLinearSVC()
+
+    newsgroups_train = fetch_20newsgroups(
+        subset="train", remove=("headers", "footers", "quotes")
+    )
+    newsgroups_test = fetch_20newsgroups(
+        subset="test", remove=("headers", "footers", "quotes")
+    )
+    model.fit(newsgroups_train.data, newsgroups_train.target)
+    logger.info(
+        "20 news group\n"
+        + classification_report(
+            newsgroups_test.target, model.predict(newsgroups_test.data),
+        )
+    )
 
     sogou = load_dataset("sogou_news")
     model.fit(

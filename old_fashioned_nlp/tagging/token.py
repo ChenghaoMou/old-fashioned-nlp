@@ -4,7 +4,7 @@
 # @Author       : Chenghao Mou (chenghao@armorblox.com)
 
 """Tagging pipeline."""
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import sklearn_crfsuite
 import sklearn_crfsuite.metrics
@@ -66,7 +66,7 @@ class CharTfidfTagger(BaseEstimator):
         predictions = self.predict(X)
         return sklearn_crfsuite.metrics.flat_f1_score(y, predictions, average="macro")
 
-    def featurize(self, tokens):
+    def featurize(self, tokens) -> List[Dict[str, Any]]:
         return [
             dict(
                 zip(
