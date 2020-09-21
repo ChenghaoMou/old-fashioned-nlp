@@ -235,7 +235,7 @@ def classification_report(
                 results.append((label, pred, example))
                 console.print(
                     Panel(
-                        f"""[green]{label}[/green]!=[red]pred[/red]\n[i]{example}[/i]"""
+                        f"""[green]{label}[/green]!=[red]{pred}[/red]\n[i]{example}[/i]"""
                     )
                 )
 
