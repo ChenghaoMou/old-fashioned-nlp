@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="old-fashioned-nlp",
-    version="0.0.7",
+    version="0.0.8",
     author="Chenghao Mou",
     author_email="mouchenghao@gmail.com",
     description="Sklearn base nlp models",
