@@ -230,7 +230,7 @@ def classification_report(
             table.add_row(c, *list(map(str, row)))
         console.print(table)
 
-        for example, label, pred in zip(corpus, predictions, labels):
+        for example, label, pred in zip(corpus, labels, predictions):
             if label != pred:
                 results.append((label, pred, example))
                 console.print(
