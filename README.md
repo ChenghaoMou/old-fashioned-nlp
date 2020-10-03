@@ -16,10 +16,10 @@ This package aims to bring back the old fashioned NLP pipelines into your modeli
 
 ### Classification
 
-Currently, we have `TfidfLinearSVC`, `TfidfCatBoostClassifier`, `TfidfLDALinearSVC` and `TfidfLDACatBoostClassifier`.
+Currently, we have `TfidfLinearSVC`, and `TfidfLDALinearSVC`.
 
 ```python
-from old_fashioned_nlp.classification import TfidfLinearSVC, TfidfCatBoostClassifier
+from old_fashioned_nlp.classification import TfidfLinearSVC
 from sklearn.datasets import fetch_20newsgroups
 
 data_train = fetch_20newsgroups(subset='train', categories=None,
