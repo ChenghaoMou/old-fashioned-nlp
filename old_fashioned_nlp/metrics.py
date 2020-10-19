@@ -170,6 +170,7 @@ def classification_report(
     corpus: List[str],
     labels: Optional[List[Union[str, int]]],
     predictions: List[Union[str, int]],
+    confusion_matrix: bool = False,
 ) -> List[Tuple[Any, Any, str]]:
     """
     Classification report with details!
@@ -182,6 +183,8 @@ def classification_report(
         List of labels
     predictions : List[Union[str, int]]
         List of predictions
+    confusion_matrix: bool
+        Plot confusion matrix or not, by default False
 
     Returns
     -------
@@ -228,7 +231,8 @@ def classification_report(
 
         for c, row in zip(classes, cm(labels, predictions, labels=classes)):
             table.add_row(c, *list(map(str, row)))
-        console.print(table)
+        if confusion_matrix:
+            console.print(table)
 
         for example, label, pred in zip(corpus, labels, predictions):
             if label != pred:
