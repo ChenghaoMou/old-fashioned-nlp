@@ -199,7 +199,7 @@ def classification_report(
     results = []
     console = Console()
 
-    if labels:
+    if labels is not None:
         table = Table(show_header=True)
         for col in ["category", "precision", "recall", "f1-score", "support"]:
             table.add_column(col)
